@@ -1,0 +1,63 @@
+syntax = "proto2";
+  
+package LG;
+
+message VarRef {
+  required int32 varnum = 1;
+}
+
+message Const {
+  required int32 val = 1;
+}
+
+message BinaryOp {
+  enum Op {
+    PLUS = 0;
+    MINUS = 1;
+    MUL = 2;
+    DIV = 3;
+  };
+  required Op op = 1;
+  required Rvalue left = 2;
+  required Rvalue right = 3;
+}
+
+message Rvalue {
+  oneof rvalue_oneof {
+    Const cons = 1;
+    BinaryOp binop = 2;
+  }
+}
+
+message AssignmentStmt {
+  required VarRef lvalue = 1;
+  required Rvalue rvalue = 2;
+}
+
+message Cond {
+    required Rvalue rval = 1;
+}
+
+message IfCond {
+  required Cond cond = 1;
+  required StmtSeq body = 2;
+}
+
+message ElseCond {
+ 
+  required StmtSeq body = 2;
+}
+
+
+message Stmt {
+  oneof stmt_var {
+    AssignmentStmt assignmt = 1;
+    IfCond         if_cond  = 2;
+    ElseCond       else_cond = 3;
+  }
+}
+
+message StmtSeq {
+   repeated Stmt stmts = 1;
+}
+
